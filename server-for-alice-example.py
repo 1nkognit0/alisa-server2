@@ -57,20 +57,8 @@ def handle_dialog(res, req):
             sessionStorage[user_id]['guessed_cities'] = []
             # предлагаем сыграть и два варианта ответа "Да" и "Нет".
             res['response']['text'] = f'Приятно познакомиться, {first_name.title()}. Я Алиса. Отгадаешь город по фото?'
-            res['response']['buttons'] = [
-                {
-                    'title': 'Да',
-                    'hide': True
-                },
-                {
-                    'title': 'Нет',
-                    'hide': True
-                },
-                {
-                    'title': 'Помощь',
-                    'hide': True
-                }
-            ]
+            adding_buttons(res)
+            
     else:
         # Здесь у нас уже есть имя пользователя.
         # Ожидается ответ на предложение сыграть.
@@ -92,26 +80,14 @@ def handle_dialog(res, req):
                     # функция, которая выбирает город для игры и показывает фото
                     play_game(res, req)
             elif 'помощь' in req['request']['nlu']['tokens']:
-                res['response']['text'] = 'Суть игры в том, чтобы отгадать название города по картинке.'
+                res['response']['text'] = 'Суть игры в том, чтобы отгадать название города по картинке.\nБудешь играть?'
+                adding_buttons(res)
             elif 'нет' in req['request']['nlu']['tokens']:
                 res['response']['text'] = 'Пока!'
                 res['end_session'] = True
             else:
                 res['response']['text'] = 'Не понимаю. Да или Нет?'
-                res['response']['buttons'] = [
-                    {
-                        'title': 'Да',
-                        'hide': True
-                    },
-                    {
-                        'title': 'Нет',
-                        'hide': True
-                    },
-                    {
-                        'title': 'Помощь',
-                        'hide': True
-                    }
-                ]
+                adding_buttons(res)
         else:
             play_game(res, req)
 
@@ -184,6 +160,23 @@ def get_first_name(req):
             # Во всех остальных случаях возвращаем None.
             return entity['value'].get('first_name', None)
 
+
+def adding_buttons(res):
+    res['response']['buttons'] = [
+        {
+            'title': 'Да',
+            'hide': True
+        },
+        {
+            'title': 'Нет',
+            'hide': True
+        },
+        {
+            'title': 'помощь',
+            'hide': True
+        }
+    ]
+    
 
 if __name__ == '__main__':
     # app.run()
