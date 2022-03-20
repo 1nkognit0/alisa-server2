@@ -65,6 +65,10 @@ def handle_dialog(res, req):
                 {
                     'title': 'Нет',
                     'hide': True
+                },
+                {
+                    'title': 'Помощь',
+                    'hide': True
                 }
             ]
     else:
@@ -87,6 +91,8 @@ def handle_dialog(res, req):
                     sessionStorage[user_id]['attempt'] = 1
                     # функция, которая выбирает город для игры и показывает фото
                     play_game(res, req)
+            elif 'помощь' in req['request']['nlu']['tokens']:
+                res['response']['text'] = 'Суть игры в том, чтобы отгадать название города по картинке.'
             elif 'нет' in req['request']['nlu']['tokens']:
                 res['response']['text'] = 'Пока!'
                 res['end_session'] = True
@@ -99,6 +105,10 @@ def handle_dialog(res, req):
                     },
                     {
                         'title': 'Нет',
+                        'hide': True
+                    },
+                    {
+                        'title': 'Помощь',
                         'hide': True
                     }
                 ]
